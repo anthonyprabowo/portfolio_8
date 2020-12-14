@@ -1,0 +1,36 @@
+* {
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+/*
+    LAYOUT STYLE
+*/
+
+.card {
+    border: solid 1px black;
+}
+
+#employee {
+    padding: 10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#employee > img {
+    display: inline-block;
+    border-radius: 50%;
+    margin: auto 10px;
+    height: 100px;
+}
+
+.employee-details {
+    margin: 0 10px;
+}
+
+.employee-details > p{
+    color: gray;
+}
