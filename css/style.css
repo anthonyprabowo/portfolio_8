@@ -12,6 +12,8 @@ h1 {
 
 .card {
     border: solid 1px black;
+    margin: 10px auto;
+    border-radius: 5px;
 }
 
 #employee {
