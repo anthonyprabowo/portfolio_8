@@ -5,15 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Awesome Employee Directory</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans">
+    <script src="https://kit.fontawesome.com/834463d5a5.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <main>
         <h1>AWESOME STARTUP EMPLOYEE DIRECTORY</h1>
         <div id="wait-container"></div>
         <div id="employee-container"></div>
+        <div id="modal-container">
+            <i class="fas fa-arrow-circle-right" id="next-arrow"></i>
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img id="avatar" src="https://randomuser.me/api/portraits/men/14.jpg" alt="">
+                <h2 id="name">Alister Dangerfield</h2>
+                <p id="email">aprabowo@uci.edu</p>
+                <p id="city">Jakarta</p>
+                <hr>
+                <p id="phone">(909)525-6499</p>
+                <p id="address">851 Scoville Plymouth, WV 84814</p>
+                <p id="birthday">Birthday: 5/28/19</p>
+            </div>
+            <i class="fas fa-arrow-circle-left" id="back-arrow"></i>
+        </div>
         </div>
     </main>
     <!-- <script src="js/app.js"></script> -->
-    <script src="js/async.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
