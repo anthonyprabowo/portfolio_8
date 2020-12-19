@@ -19,6 +19,8 @@ h1 {
     background-color: rgba(211, 211, 211, 0.2);
 }
 
+
+
 #employee {
     padding: 10px 10px;
     display: flex;
@@ -157,6 +159,10 @@ h1 {
     
     p {
         font-size: 0.8em;
+    }
+
+    #wait-container {
+        margin: 10px;
     }
 
     #employee-container {

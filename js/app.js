@@ -47,11 +47,10 @@ async function fetchData(url) {
         .then(result => {
             for(let i = 0; i < 12; i++) {
                 generateHTML(result[i])
+                employeesDetailArray.push(result[i]);
             }
             displayHTML();
-            employeesDetailArray.push(result);
         })
-        // .then(result => result[0]);
         .catch(err => {
             wait.innerHTML = "Something Went Wrong! :(";
             console.log(err);
@@ -87,15 +86,15 @@ function displayHTML() {
 }
 
 function createModal(num) {
-    const employeesDetail = employeesDetailArray[0]
-    birthday = employeesDetail[num].dob.date.toString();
+    const employeesDetail = employeesDetailArray[num]
+    const birthday = employeesDetail.dob.date.toString();
     modalContainer.style.display = 'block';
-    modalContent[1].src = employeesDetail[num].picture.large;
-    modalContent[2].innerHTML = `${employeesDetail[num].name.first} ${employeesDetail[num].name.last}`;
-    modalContent[3].innerHTML = `${employeesDetail[num].email}`;
-    modalContent[4].innerHTML = `${employeesDetail[num].location.city}`;
-    modalContent[6].innerHTML = `${employeesDetail[num].phone}`;
-    modalContent[7].innerHTML = `${employeesDetail[num].location.street.number} ${employeesDetail[num].location.street.name}, ${employeesDetail[num].location.state} ${employeesDetail[num].location.postcode}`
+    modalContent[1].src = employeesDetail.picture.large;
+    modalContent[2].innerHTML = `${employeesDetail.name.first} ${employeesDetail.name.last}`;
+    modalContent[3].innerHTML = `${employeesDetail.email}`;
+    modalContent[4].innerHTML = `${employeesDetail.location.city}`;
+    modalContent[6].innerHTML = `${employeesDetail.phone}`;
+    modalContent[7].innerHTML = `${employeesDetail.location.street.number} ${employeesDetail.location.street.name}, ${employeesDetail.location.state} ${employeesDetail.location.postcode}`
     modalContent[8].innerHTML = `Birthday: ${birthday.substring(5,7)}/${birthday.substring(8,10)}/${birthday.substring(0,4)}`;
 }
 
@@ -104,7 +103,6 @@ function createModal(num) {
 // ---------------------
 
 function modalEventListener() {
-    const employeesDetail = employeesDetailArray[0]
     for(let i = 0; i < cards.length; i++) {
         cards[i].addEventListener('click', () => {
             modal.style.animation = 'pull-down .3s ease-in-out forwards';
