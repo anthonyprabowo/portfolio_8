@@ -13,10 +13,11 @@ const modal = document.querySelector('.modal-content');
 const nextArrow = document.getElementById('next-arrow');
 const backArrow = document.getElementById('back-arrow');
 const search = document.getElementById('search');
-const name = document.getElementsByClassName('name');
-const modalDisplayed = [];
+const names = document.getElementsByClassName('name');
+let modalDisplayed = [];
 let visited = 0;
 let modalClicked = 0;
+let index = 0;
 
 
 
@@ -102,9 +103,31 @@ function createModal(num) {
     modalContent[8].innerHTML = `Birthday: ${birthday.substring(5,7)}/${birthday.substring(8,10)}/${birthday.substring(0,4)}`;
 }
 
+function findIndex() {
+    for(let i = 0; i < modalDisplayed.length; i++) {
+        if(modalDisplayed[i] === visited){
+            index = i;
+            break;
+        } else {
+            // continue
+        }
+    }
+}
+
 // ---------------------
 //  EVENT LISTENER
 // ---------------------
+
+function populateModalDisplayed() {
+    modalDisplayed = [];
+    for(let i = 0; i < 12; i++) {
+        if(employeesDetailArray[i].display) {
+            modalDisplayed.push(i);
+        } else {
+            // do nothing
+        }
+    }
+}
 
 function modalEventListener() {
     for(let i = 0; i < cards.length; i++) {
@@ -112,13 +135,7 @@ function modalEventListener() {
             modal.style.animation = 'pull-down .3s ease-in-out forwards';
             createModal(i);
             visited = i;
-            for(let i = 0; i < 12; i++) {
-                if(employeesDetailArray[i].display) {
-                    modalDisplayed.push(i);
-                } else {
-                    // do nothing
-                }
-            }
+            populateModalDisplayed();
         })
     }
 }
@@ -140,13 +157,18 @@ window.onclick = function(event) {
 
 // When the user clicks the next button on modal
 nextArrow.addEventListener('click', () => {
+    findIndex();
     setTimeout(() => {
-        if(visited === modalDisplayed.length - 1) {
-            createModal(modalDisplayed[visited]);
-            visited = 0;
-        } else {
-            createModal(modalDisplayed[visited + 1]);
-            visited += 1;
+        for(let i = 0; i < 12; i++){
+            if(modalDisplayed[index+1] === visited){
+                createModal(visited);
+                break;
+            } else if(visited === modalDisplayed[modalDisplayed.length-1]) {
+                visited = 0;
+                index = -1;
+            } else {
+                visited++;
+            }
         }
     }, 250);
     modal.style.animation = 'slide-right 0.5s ease-in-out forwards';
@@ -154,19 +176,17 @@ nextArrow.addEventListener('click', () => {
 })
 
 backArrow.addEventListener('click', () => {
+    findIndex();
     setTimeout(() => {
-        if(modalClicked === 0) {
-            modalClicked = 11;
-            createModal(modalClicked);
-        } else {
-            for(let i = modalClicked; i >= 0; i++) {
-                if(employeesDetailArray[i - 1].display) {
-                    modalClicked = i - 1;
-                    createModal(modalClicked);
-                    break;
-                } else {
-                    modalClicked = i - 1;
-                }
+        for(let i = 0; i < 12; i++){
+            if(modalDisplayed[index-1] === visited){
+                createModal(visited);
+                break;
+            } else if(visited === modalDisplayed[0]) {
+                visited = modalDisplayed[modalDisplayed.length-1];
+                index = modalDisplayed.length;
+            } else {
+                visited--;
             }
         }
     }, 250);
@@ -175,16 +195,19 @@ backArrow.addEventListener('click', () => {
 })
 
 search.addEventListener('keyup', () => {
-    for(let i = 0; i < name.length; i++){
+    for(let i = 0; i < names.length; i++){
         if(search.value === '') {
             cards[i].style.display = '';
             employeesDetailArray[i].display = true;
-        } else if(name[i].innerHTML.toLowerCase().includes(search.value.toLowerCase())) {
+            populateModalDisplayed();
+        } else if(names[i].innerHTML.toLowerCase().includes(search.value.toLowerCase())) {
             cards[i].style.display = '';
             employeesDetailArray[i].display = true;
+            populateModalDisplayed();
         } else {
             cards[i].style.display = 'none';
             employeesDetailArray[i].display = false;
+            populateModalDisplayed();
         }
     }
 });
