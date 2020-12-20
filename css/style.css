@@ -19,6 +19,12 @@ h1 {
     background-color: rgba(211, 211, 211, 0.2);
 }
 
+#search {
+    width: 250px;
+    height: 30px;
+    padding: 5px;
+}
+
 
 
 #employee {
@@ -163,6 +169,11 @@ h1 {
 
     #wait-container {
         margin: 10px;
+    }
+
+    #search {
+        margin-left: 10px;
+        margin-bottom: 10px;
     }
 
     #employee-container {

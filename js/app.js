@@ -12,6 +12,10 @@ const modalContent = document.querySelector('.modal-content').children;
 const modal = document.querySelector('.modal-content');
 const nextArrow = document.getElementById('next-arrow');
 const backArrow = document.getElementById('back-arrow');
+const search = document.getElementById('search');
+const name = document.getElementsByClassName('name');
+const modalDisplayed = [];
+let visited = 0;
 let modalClicked = 0;
 
 
@@ -38,7 +42,6 @@ function checkStatus(response) {
 
 
 async function fetchData(url) {
-    let i = 0;
     wait.innerHTML="LOADING..."
     await fetch(url)
         .then(response => checkStatus(response))
@@ -48,6 +51,7 @@ async function fetchData(url) {
             for(let i = 0; i < 12; i++) {
                 generateHTML(result[i])
                 employeesDetailArray.push(result[i]);
+                employeesDetailArray[i].display = true;
             }
             displayHTML();
         })
@@ -55,7 +59,7 @@ async function fetchData(url) {
             wait.innerHTML = "Something Went Wrong! :(";
             console.log(err);
         });
-    await modalEventListener();
+    modalEventListener();
     if(wait.innerHTML === "LOADING..."){
         wait.style.display="none";
     }
@@ -67,7 +71,7 @@ function generateHTML(obj) {
                 <div id="employee">
                     <img src=${obj.picture.large} alt="">
                     <div class="employee-details">
-                        <h2>${obj.name.first} ${obj.name.last}</h2>
+                        <h2 class="name">${obj.name.first} ${obj.name.last}</h2>
                         <p>${obj.email}</p>
                         <p>${obj.location.city}
                     </div>
@@ -107,7 +111,14 @@ function modalEventListener() {
         cards[i].addEventListener('click', () => {
             modal.style.animation = 'pull-down .3s ease-in-out forwards';
             createModal(i);
-            modalClicked = i;
+            visited = i;
+            for(let i = 0; i < 12; i++) {
+                if(employeesDetailArray[i].display) {
+                    modalDisplayed.push(i);
+                } else {
+                    // do nothing
+                }
+            }
         })
     }
 }
@@ -117,7 +128,7 @@ modalClose.addEventListener('click', () => {
     modal.style.animation = 'pull-up .3s ease-in-out forwards';
     setTimeout(() => modalContainer.style.display = 'none', 300);
 
-})
+});
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
@@ -130,32 +141,50 @@ window.onclick = function(event) {
 // When the user clicks the next button on modal
 nextArrow.addEventListener('click', () => {
     setTimeout(() => {
-        // if the last modal is clicked, clicking the next arrow will return to number 0
-        if(modalClicked === 11){
-            modalClicked = 0;
-        } else { // else, increase the modal number by 1
-            modalClicked += 1;
+        if(visited === modalDisplayed.length - 1) {
+            createModal(modalDisplayed[visited]);
+            visited = 0;
+        } else {
+            createModal(modalDisplayed[visited + 1]);
+            visited += 1;
         }
-        createModal(modalClicked);
-    }, 500);
-    modal.style.animation = 'slide-right 1s ease-in-out forwards';
-    setTimeout(() => modal.style.animation = 'none', 1000);
+    }, 250);
+    modal.style.animation = 'slide-right 0.5s ease-in-out forwards';
+    setTimeout(() => modal.style.animation = 'none', 500);
 })
 
 backArrow.addEventListener('click', () => {
     setTimeout(() => {
         if(modalClicked === 0) {
             modalClicked = 11;
+            createModal(modalClicked);
         } else {
-            modalClicked -= 1;
+            for(let i = modalClicked; i >= 0; i++) {
+                if(employeesDetailArray[i - 1].display) {
+                    modalClicked = i - 1;
+                    createModal(modalClicked);
+                    break;
+                } else {
+                    modalClicked = i - 1;
+                }
+            }
         }
-        createModal(modalClicked);
-    }, 500);
-    modal.style.animation = 'slide-left 1s ease-in-out forwards';
-    setTimeout(() => modal.style.animation = 'none', 1000);
+    }, 250);
+    modal.style.animation = 'slide-left 0.5s ease-in-out forwards';
+    setTimeout(() => modal.style.animation = 'none', 500);
 })
 
-
-
-
-
+search.addEventListener('keyup', () => {
+    for(let i = 0; i < name.length; i++){
+        if(search.value === '') {
+            cards[i].style.display = '';
+            employeesDetailArray[i].display = true;
+        } else if(name[i].innerHTML.toLowerCase().includes(search.value.toLowerCase())) {
+            cards[i].style.display = '';
+            employeesDetailArray[i].display = true;
+        } else {
+            cards[i].style.display = 'none';
+            employeesDetailArray[i].display = false;
+        }
+    }
+});
